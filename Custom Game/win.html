@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Custom Game </title>
+		<style>
+			body {
+				font-family: Verdana, sans-serif;
+				text-align: center;
+			}
+		</style>
+		<script src="https://simplycodingcourses.com/files/simply.js"></script>
+		<script>
+			function start(){
+				sjs.open("target",500,400);
+				var text = new sjs.Text("Congrats, ya won!",24,"blue");
+				text.centerH();
+				var button = new sjs.Button("Play again", function(){
+					window.close();
+				});
+				button.center();
+			} //end start
+		</script>
+	</head>
+	<body onload="start()">
+		<h1> Custom Game </h1>
+		<div id="target" style="margin:auto;background:#00bcff;"></div>
+	</body>
+</html>

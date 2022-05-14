@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Half-Guy the game</title>
+		<style>
+			body {
+				font-family: Verdana, sans-serif;
+				text-align: center;
+			}
+		</style>
+		<script src="https://simplycodingcourses.com/files/simply.js"></script>
+		<script>
+			function start(){
+				sjs.open("target",500,400);
+				//ship
+				var ship = new sjs.Image("Images/ship.png");
+				ship.center().offset(-60,60);
+				ship.setSize(100,100);
+				ship.type = "ship";
+				//arrow keys
+				sjs.keyDown(LEFT_KEY, function(){
+					ship.pushLeft();
+				});
+				sjs.keyDown(RIGHT_KEY, function(){
+					ship.pushRight();
+				});
+				//bullets
+				var canShoot = true;
+				var pew = new Audio("Sounds/zoop.wav");
+				var boom = new Audio("Sounds/boom.wav");
+				var scream = new Audio("Sounds/scream.wav");
+				var message1 = new Audio("Sounds/message1.wav");
+				var message2 = new Audio("Sounds/message2.wav");
+				var message3 = new Audio("Sounds/message3.wav");
+				setInterval(function(){
+					sjs.keyDown(SPACE_KEY, function(){
+						if(canShoot == true){
+							canShoot = false;
+							var bullet = new sjs.Image("Images/bullet.png");
+							bullet.type = "bullet";
+							bullet.moveTo(ship.getX()+45,ship.getY());
+							bullet.setSize(5,25);
+							bullet.pushUp(25.5);
+							bullet.friction = 0;
+							bullet.noBounds = true;
+							pew.play();
+							window.addEventListener("keyup", function(e){
+								if(e.keyCode == SPACE_KEY){
+									canShoot = true;
+								}
+							});
+						}
+					});
+				});
+				//health and points
+				var health = 100;
+				var health_text = new sjs.Text("Health: 100", "21", "black");
+				var showMessage = true;
+				var messageNumber = 2;
+				var points = 0;
+				var points_text = new sjs.Text("Points: 0/2", "21", "black");
+				points_text.moveTo(400,0);
+				setInterval(function(){
+					if(points > messageNumber-1){
+						points = 0;
+						if(messageNumber == 10){
+							window.location = "win.html";
+						}
+						if(messageNumber == 5){
+							messageNumber = 10;
+							var message_two = new sjs.Text("Defeat "+messageNumber+" spaceships")
+							message_two.center();
+							setTimeout(function(){
+								message_two.destroy();
+							},2000);
+						}
+						if(messageNumber == 2){
+							messageNumber = 5;
+							var message_two = new sjs.Text("Defeat "+messageNumber+" spaceships")
+							message_two.center();
+							setTimeout(function(){
+								message_two.destroy();
+							},2000);
+						}
+						points_text.setText("Points: "+points+"/"+messageNumber);	
+					}
+				});
+				//bombs
+				setInterval(function(){
+					var bomb = new sjs.Image("Images/bomb.png");
+					bomb.type = "bomb";
+					bomb.setSize(50,50);
+					bomb.friction = 0;
+					bomb.noBounds = true;
+					bomb.pushDown(10);
+					bomb.moveTo(Math.random()*(bomb.getClamp().x),0);
+				},1500);
+				//enemy spaceships
+				setInterval(function(){
+					var enemy = new sjs.Image("Images/enemyship.png");
+					enemy.type = "enemy";
+					enemy.setSize(50,50);
+					enemy.friction = 0;
+					enemy.noBounds = true;
+					enemy.pushLeft(5);
+					enemy.moveTo(400,50);
+				},1500);
+				//onhits
+				sjs.onHit("bomb","bottom_screen", function(x,y){
+					x.destroy();
+				});
+				sjs.onHit("enemy","left_screen", function(x,y){
+					x.destroy();
+				});
+				sjs.onHit("ship","bomb", function(x,y){
+					y.destroy();
+					health = health - 10;
+					health_text.setText("Health: "+health);
+					boom.play();
+					if(health < 1){
+						window.close();
+					}
+				});
+				sjs.onHit("enemy","bullet", function(x,y){
+					points = points + 1;
+					points_text.setText("Points: "+points+"/"+messageNumber);
+					x.destroy();
+				});
+				sjs.onHit("top_screen","bullet", function(x,y){
+					y.destroy();
+				});
+				//messages
+				var message_one = new sjs.Text("Defeat "+messageNumber+" spaceships")
+				message_one.center();
+				setTimeout(function(){
+					message_one.destroy();
+				},2000);
+				//half-guy
+				var person = new sjs.Image("Images/halfguy.gif");
+				var insultNumber = 1;
+				person.moveTo(0,400);
+				person.setSize(50,50);
+				//crazy thing
+				setInterval(function(){
+					var bubble = new sjs.Image("Images/speechbubble.png");
+					bubble.moveTo(60,380);
+					var halfguy = new sjs.Text("",10,"black");
+					halfguy.moveTo(70,380);
+					if(insultNumber == 1){
+						halfguy.setText("I want cookies, waa.");
+						bubble.setSize(halfguy.getWidth()+20,20);
+						setTimeout(function(){
+							halfguy.destroy();
+							bubble.destroy();
+						},2000);
+					}
+					if(insultNumber == 2){
+						halfguy.setText("I chose the hardest job for you. Good luck making it out alive...ha!");
+						bubble.setSize(halfguy.getWidth()+20,20);
+						setTimeout(function(){
+							halfguy.destroy();
+							bubble.destroy();
+						},2000);
+					}
+					if(insultNumber == 3){
+						halfguy.setText("Where are the cookies? I told you to get me cookies!");
+						bubble.setSize(halfguy.getWidth()+20,20);
+						setTimeout(function(){
+							halfguy.destroy();
+							bubble.destroy();
+						},2000);
+					}
+					if(insultNumber == 4){
+						halfguy.setText("You want to see someone? Look in a mirror.");
+						bubble.setSize(halfguy.getWidth()+20,20);
+						setTimeout(function(){
+							halfguy.destroy();
+							bubble.destroy();
+						},2000);
+					}
+					if(insultNumber == 5){
+						halfguy.setText("No buts, no cuts, no coconuts!");
+						bubble.setSize(halfguy.getWidth()+20,20);
+						setTimeout(function(){
+							halfguy.destroy();
+							bubble.destroy();
+						},2000);
+					}
+					if(insultNumber == 6){
+						halfguy.setText("Do it...or else you'll have to do it!");
+						bubble.setSize(halfguy.getWidth()+20,20);
+						setTimeout(function(){
+							halfguy.destroy();
+							bubble.destroy();
+						},2000);
+					}
+					if(insultNumber == 7){
+						halfguy.destroy();
+						bubble.destroy();
+						insultNumber = 0;
+					}
+					insultNumber = insultNumber + 1;
+				},5000);
+			} //end start
+		</script>
+	</head>
+	<body onload="start()">
+		<h1> Half-Guy the game </h1>
+		<center>
+		</center>
+		<div id="target" style="margin:auto;background:#00bcff;"></div>
+	</body>
+</html>

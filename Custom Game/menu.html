@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<title>Half-Guy the game</title>
+		<style>
+			body {
+				font-family: Verdana, sans-serif;
+				text-align: center;
+			}
+		</style>
+		<script src="https://simplycodingcourses.com/files/simply.js"></script>
+		<script>
+			function start(){
+				sjs.open("target",500,400);
+				//background
+				var background = new sjs.Image("Images/random_picture.gif");
+				background.setSize(500,500);
+				var music = new Audio("Sounds/corneria.mp3")
+				//var logo = new sjs.Text("Half-Guy the game", 40, "purple");
+				//logo.centerH();
+				var play = new sjs.Button("Click to play", function(){
+					window.open("customgame.html");
+					music.play();
+				});
+				play.center();
+				play.setSize(50,50);
+			} //end start
+		</script>
+	</head>
+	<body onload="start()">
+		<h1>Half-Guy the game</h1>
+		<div id="target" style="margin:auto;background:white;"></div>
+		<p>Shoot the spaceships and dodge bombs. Try to ignore Half-Guy's criticism.</p>
+		<p>Based on a comic character invented by me, Michael V.</p>
+		<p>A recreation of <a href="https://scratch.mit.edu/projects/347362633">something</a> I made on Scratch a long time ago.</p>
+		<link>
+	</body>
+</html>
